@@ -24,5 +24,6 @@ namespace GMapTutorial
         {
             return UserID - other.UserID;
         }
+
     }
 }
