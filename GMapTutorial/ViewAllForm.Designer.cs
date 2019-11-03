@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewAllForm));
             this.btnClose = new System.Windows.Forms.Button();
             this.listViewPOI = new System.Windows.Forms.ListView();
             this.SuspendLayout();
@@ -58,8 +59,9 @@
             this.ClientSize = new System.Drawing.Size(461, 484);
             this.Controls.Add(this.listViewPOI);
             this.Controls.Add(this.btnClose);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ViewAllForm";
-            this.Text = "ViewAllForm";
+            this.Text = "View All Form";
             this.ResumeLayout(false);
 
         }

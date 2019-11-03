@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapForm));
             this.gmap = new GMap.NET.WindowsForms.GMapControl();
             this.btnViewAll = new System.Windows.Forms.Button();
             this.CBofIds = new System.Windows.Forms.ComboBox();
@@ -160,8 +161,9 @@
             this.Controls.Add(this.CBofIds);
             this.Controls.Add(this.btnViewAll);
             this.Controls.Add(this.gmap);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MapForm";
-            this.Text = "Form1";
+            this.Text = "Map View";
             this.ResumeLayout(false);
             this.PerformLayout();
 

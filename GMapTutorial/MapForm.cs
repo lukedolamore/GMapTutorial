@@ -22,15 +22,12 @@ namespace GMapTutorial
         List<int> UserIds = new List<int>();
         static List<PlaceOfInterest> SelectHull = new List<PlaceOfInterest>();
 
-        
-
         public MapForm()
         {
             placeOfInterests.Clear();
             InitializeComponent();
             GetLocationData();
         }
-
 
         private void gmap_Load(object sender, EventArgs e)
         {          
@@ -156,24 +153,31 @@ namespace GMapTutorial
         //Convex Hull
         private void btnConvex_Click(object sender, EventArgs e)
         {
-            int xid = int.Parse(CBofIds.SelectedItem.ToString());
-            foreach (var mark in placeOfInterests)
+            if (CBofIds.SelectedItem == null)
             {
-                if (mark.UserID == xid)
-                {                   
-                    SelectHull.Add(new PlaceOfInterest(mark.UserID, mark.Latitude, mark.Longitude, mark.Description));
-                }           
+                MessageBox.Show("Please Remove all markers and Select a User ID");
             }
-            List<PlaceOfInterest> ConvexHull = MakeHull(SelectHull);
-            GMapOverlay routes = new GMapOverlay("routes");
-            List<PointLatLng> points = new List<PointLatLng>();
-            foreach (PlaceOfInterest poi in ConvexHull)
+            else
             {
-                points.Add(new PointLatLng(poi.Latitude, poi.Longitude));
-                GMapRoute route = new GMapRoute(points, "Convex Hull");
-                route.Stroke = new Pen(Color.Red, 3);
-                routes.Routes.Add(route);
-                gmap.Overlays.Add(routes);
+                int xid = int.Parse(CBofIds.SelectedItem.ToString());
+                foreach (var mark in placeOfInterests)
+                {
+                    if (mark.UserID == xid)
+                    {
+                        SelectHull.Add(new PlaceOfInterest(mark.UserID, mark.Latitude, mark.Longitude, mark.Description));
+                    }
+                }
+                List<PlaceOfInterest> ConvexHull = MakeHull(SelectHull);
+                GMapOverlay routes = new GMapOverlay("routes");
+                List<PointLatLng> points = new List<PointLatLng>();
+                foreach (PlaceOfInterest poi in ConvexHull)
+                {
+                    points.Add(new PointLatLng(poi.Latitude, poi.Longitude));
+                    GMapRoute route = new GMapRoute(points, "Convex Hull");
+                    route.Stroke = new Pen(Color.Red, 3);
+                    routes.Routes.Add(route);
+                    gmap.Overlays.Add(routes);
+                }
             }
 
         }
