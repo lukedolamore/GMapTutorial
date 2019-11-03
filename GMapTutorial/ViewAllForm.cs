@@ -35,7 +35,6 @@ namespace GMapTutorial
                 var json = client.DownloadString(url);
                 JavaScriptSerializer ser = new JavaScriptSerializer();
                 var JSONArray = ser.Deserialize<Dictionary<string, string>[]>(json);
-                //rTBnotes.AppendText(json + "\n\n");
                 foreach (Dictionary<string, string> map in JSONArray)
                 {
                     int userid = int.Parse(map["userid"]);
@@ -43,28 +42,17 @@ namespace GMapTutorial
                     double longitude = double.Parse(map["longitude"]);
                     string description = map["description"];
                     PlaceOfInterest poi = new PlaceOfInterest(userid, latitude, longitude, description);
-
                     ListViewItem listViewItem = new ListViewItem();
                     listViewItem.Text = (poi.UserID.ToString());
                     listViewItem.SubItems.Add(poi.Latitude.ToString());
                     listViewItem.SubItems.Add(poi.Longitude.ToString());
                     listViewItem.SubItems.Add(poi.Description.ToString());
                     listViewPOI.Items.Add(listViewItem);
-                    //listViewPOI.Items.Add(poi.UserID + " : " + poi.Latitude + " : " + poi.Longitude + " : " + poi.Description);
-
-                    //string ss = poi.UserID + " : " + poi.Latitude + " : " + poi.Longitude + " : " + poi.Description;
-                    //ListViewItem item1 = new ListViewItem(ss);
-
                     placeOfInterests.Add(poi);
                 }
             }
         }//GetLocationData
-
-        private void AddToListView(List<PlaceOfInterest> poi)
-        {
-            
-        }
-
+        
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
