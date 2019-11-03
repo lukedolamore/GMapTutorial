@@ -18,12 +18,15 @@ namespace GMapTutorial
         {
             //x = lat
             //y = lng
+            //-A.Lat * B.Long + B.Lat * A.Long
+            //-B.Lat * C.Long + C.Lat * B.Long
+            //-C.Lat * A.Long + A.Lat * C.Long
             double ABBA = (A.Latitude * b.Longitude) - (b.Latitude * A.Longitude) + (b.Latitude * c.Longitude) - (c.Latitude * b.Longitude) + (c.Latitude * A.Longitude) - (A.Latitude * c.Longitude);
             if (ABBA == 0)
             {
                 double d1 = GetDistance(A.Latitude, A.Longitude, b.Latitude, b.Longitude);
                 double d2 = GetDistance(A.Latitude, A.Longitude, c.Latitude, c.Longitude);
-                return d1.CompareTo((d2));
+                return ((int)Math.Round(d1).CompareTo((int)Math.Round(d2)));
             }
             return (int)ABBA;
         }

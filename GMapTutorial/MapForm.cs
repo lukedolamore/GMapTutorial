@@ -40,46 +40,7 @@ namespace GMapTutorial
             GMaps.Instance.Mode = AccessMode.ServerOnly;
             //gmap.SetPositionByKeywords("Invercargill, New Zealand");
             gmap.Position = new PointLatLng(-46.4132, 168.3538);//Invercargill lat & lng
-            gmap.ShowCenter = false;//get rids of red cross in the middle
-            
-
-
-
-
-
-
-
-            //pg3 Polygons
-            //GMapOverlay polygons = new GMapOverlay("polygons");
-            //List<PointLatLng> points = new List<PointLatLng>();
-            //points.Add(new PointLatLng(-46.413279, 168.353798));
-            //points.Add(new PointLatLng(-46.414529, 168.353864));
-            //points.Add(new PointLatLng(-46.414492, 168.359946));
-            //points.Add(new PointLatLng(-46.413227, 168.359955));           
-            //GMapPolygon polygon = new GMapPolygon(points, "Southern Institute of Technology Invercargill");
-            //polygon.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
-            //polygon.Stroke = new Pen(Color.Red, 1);
-            //polygons.Polygons.Add(polygon);
-            //gmap.Overlays.Add(polygons);
-
-            //pg3 Routes
-
-            //GMapRoute route = new GMapRoute(rpoints, "A walk to PakNSave and the Movies");
-            //route.Stroke = new Pen(Color.Red, 3);
-            //Console.WriteLine(route.Distance);//return route distance in KM
-            //routes.Routes.Add(route);
-            //gmap.Overlays.Add(routes);
-            //GMapOverlay routes = new GMapOverlay("routes");
-            //List<PointLatLng> rpoints = new List<PointLatLng>();
-            //foreach (var mark in placeOfInterests)
-            //{
-            //    rpoints.Add(new PointLatLng(mark.Latitude, mark.Longitude));
-            //    GMapRoute route = new GMapRoute(rpoints, "A walk");
-            //    route.Stroke = new Pen(Color.Red, 3);
-            //    routes.Routes.Add(route);
-            //    gmap.Overlays.Add(routes);
-            //}
-
+            gmap.ShowCenter = false;//get rids of red cross in the middle            
         }//gmap_Load
 
         private void gmap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
@@ -124,7 +85,7 @@ namespace GMapTutorial
             ViewAllForm viewAllForm = new ViewAllForm();
             viewAllForm.ShowDialog();
         }
-        //GMapOverlay markers = new GMapOverlay("markers");
+
         private void CBofIds_SelectedIndexChanged(object sender, EventArgs e)
         {
             int xid = int.Parse(CBofIds.SelectedItem.ToString());
@@ -255,7 +216,7 @@ namespace GMapTutorial
 
         private void btnMEC_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("TBC");
+            MessageBox.Show("Coming Soon");
         }
     }//Class
 }//NS
