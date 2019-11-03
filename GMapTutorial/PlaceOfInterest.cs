@@ -20,10 +20,18 @@ namespace GMapTutorial
             Description = description;
         }
 
-        int IComparable<PlaceOfInterest>.CompareTo(PlaceOfInterest other)
-        {
-            return UserID - other.UserID;
-        }
+        //int IComparable<PlaceOfInterest>.CompareTo(PlaceOfInterest other)
+        //{
+        //    return UserID - other.UserID;
+        //}
 
+        public int CompareTo(PlaceOfInterest other)
+        {
+            if (Latitude < other.Latitude) return -1;
+            else if (Latitude > other.Latitude) return +1;
+            else if (Longitude < other.Longitude) return -1;
+            else if (Longitude > other.Longitude) return +1;
+            else return 0;
+        }
     }
 }

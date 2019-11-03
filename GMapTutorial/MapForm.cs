@@ -20,8 +20,8 @@ namespace GMapTutorial
     {
         List<PlaceOfInterest> placeOfInterests = new List<PlaceOfInterest>();
         List<int> UserIds = new List<int>();
-        List<PlaceOfInterest> SelectHull = new List<PlaceOfInterest>();
-        List<PlaceOfInterest> Hull = new List<PlaceOfInterest>();
+        static List<PlaceOfInterest> SelectHull = new List<PlaceOfInterest>();
+
         
 
         public MapForm()
@@ -97,7 +97,6 @@ namespace GMapTutorial
                 {
                     Console.WriteLine(mark.UserID);
                     GMapMarker marker = new GMarkerGoogle(new PointLatLng(mark.Latitude, mark.Longitude), GMarkerGoogleType.red_pushpin);
-
                     marker.ToolTipText = (string.Format("User ID :{0}\nDesc :{1}", mark.UserID, mark.Description));
                     marker.ToolTip.Stroke = Pens.Black;
                     marker.ToolTip.TextPadding = new Size(20, 20);
@@ -116,7 +115,6 @@ namespace GMapTutorial
                 gmap.Overlays.RemoveAt(0);
            }
             SelectHull.Clear();
-            Hull.Clear();
             gmap.Refresh();
         }
 
@@ -159,33 +157,17 @@ namespace GMapTutorial
         private void btnConvex_Click(object sender, EventArgs e)
         {
             int xid = int.Parse(CBofIds.SelectedItem.ToString());
-            PlaceOfInterest pivot = new PlaceOfInterest(-1, double.MaxValue, double.MaxValue, "");
             foreach (var mark in placeOfInterests)
             {
                 if (mark.UserID == xid)
                 {                   
-                    if (pivot.Latitude > mark.Latitude && pivot.Longitude > mark.Longitude)
-                    {
-                        pivot = new PlaceOfInterest(mark.UserID, mark.Latitude, mark.Longitude, mark.Description);
-                    }
                     SelectHull.Add(new PlaceOfInterest(mark.UserID, mark.Latitude, mark.Longitude, mark.Description));
                 }           
             }
-            SelectHull.Sort(new RadialSort(pivot));
-            while(SelectHull.Count > 0)
-            {
-                Hull.Add(SelectHull[0]);
-                SelectHull.Remove(SelectHull[0]);
-                while (!ValidHullSegment(Hull))
-                {
-                    Hull.Remove(Hull[Hull.Count - 2]);
-                }//while
-            }//while
-            Hull.Add(pivot);
-           // Hull.Reverse();
+            List<PlaceOfInterest> ConvexHull = MakeHull(SelectHull);
             GMapOverlay routes = new GMapOverlay("routes");
             List<PointLatLng> points = new List<PointLatLng>();
-            foreach (PlaceOfInterest poi in Hull)
+            foreach (PlaceOfInterest poi in ConvexHull)
             {
                 points.Add(new PointLatLng(poi.Latitude, poi.Longitude));
                 GMapRoute route = new GMapRoute(points, "Convex Hull");
@@ -196,23 +178,62 @@ namespace GMapTutorial
 
         }
 
-        private bool ValidHullSegment(List<PlaceOfInterest> hull)
+        private static List<PlaceOfInterest> MakeHull(List<PlaceOfInterest> selectHull)
         {
-            if (Hull.Count <= 3)
-            {
-                return true;
-            }
-            PlaceOfInterest A = Hull[Hull.Count - 3];
-            PlaceOfInterest b = Hull[Hull.Count - 2];
-            PlaceOfInterest c = Hull[Hull.Count - 1];
-            double ABBA = (A.Latitude * b.Longitude) - (b.Latitude * A.Longitude) + (b.Latitude * c.Longitude) - (c.Latitude * b.Longitude) + (c.Latitude * A.Longitude) - (A.Latitude * c.Longitude);
-            return ABBA < 0;
+            List<PlaceOfInterest> newPoints = new List<PlaceOfInterest>(selectHull);
+            newPoints.Sort();
+            return HullSorted(newPoints);
         }
 
-        
+        private static List<PlaceOfInterest> HullSorted(List<PlaceOfInterest> newPoints)
+        {
+            List<PlaceOfInterest> upperHull = new List<PlaceOfInterest>();
+            foreach (PlaceOfInterest p in SelectHull)
+            {
+                while (upperHull.Count >= 2)
+                {
+                    PlaceOfInterest q = upperHull[upperHull.Count - 1];
+                    PlaceOfInterest r = upperHull[upperHull.Count - 2];
+                    if ((q.Latitude - r.Latitude) * (p.Longitude - r.Longitude) >= (q.Longitude - r.Longitude) * (p.Latitude - r.Latitude))
+                    {
+                        upperHull.RemoveAt(upperHull.Count - 1);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }//While
+                upperHull.Add(p);
+            }
+            upperHull.RemoveAt(upperHull.Count - 1);
 
-
-
+            List<PlaceOfInterest> lowerHull = new List<PlaceOfInterest>();
+            for (int i = SelectHull.Count - 1; i >= 0; i--)
+            {
+                PlaceOfInterest p = SelectHull[i];
+                while (lowerHull.Count >= 2)
+                {
+                    PlaceOfInterest q = lowerHull[lowerHull.Count - 1];
+                    PlaceOfInterest r = lowerHull[lowerHull.Count - 2];
+                    if ((q.Latitude - r.Latitude) * (p.Longitude - r.Longitude) >= (q.Longitude - r.Longitude) * (p.Latitude - r.Latitude))
+                    {
+                        lowerHull.RemoveAt(lowerHull.Count - 1);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                lowerHull.Add(p);
+            }
+            lowerHull.RemoveAt(lowerHull.Count - 1);
+            if (!(upperHull.Count == 1 && Enumerable.SequenceEqual(upperHull, lowerHull)))
+            {
+                upperHull.AddRange(lowerHull);
+                upperHull.Add(SelectHull[0]);
+            }
+            return upperHull;
+        }
 
         private void btnMEC_Click(object sender, EventArgs e)
         {
