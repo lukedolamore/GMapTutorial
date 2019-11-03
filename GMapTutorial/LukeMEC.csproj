@@ -56,7 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="des.cs" />
     <Compile Include="MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
